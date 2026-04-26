@@ -32,12 +32,14 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Mã hóa mật khẩu
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword()
-            );
-            $user->setPassword($hashedPassword);
+            // Lấy mật khẩu thô người dùng nhập từ form (vì mapped => false)
+            $plainPassword = $form->get('password')->getData();
+            
+            // Nếu có nhập mật khẩu thì tiến hành mã hóa
+            if ($plainPassword) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
 
             $em->persist($user);
             $em->flush();
@@ -69,8 +71,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Nếu người dùng nhập password mới vào form, mã hóa lại. Nếu không, giữ nguyên.
+            // Lấy mật khẩu từ form
             $plainPassword = $form->get('password')->getData();
+            
+            // Nếu người dùng nhập password mới vào form, mã hóa lại. Nếu không, giữ nguyên.
             if ($plainPassword) {
                 $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
             } else {

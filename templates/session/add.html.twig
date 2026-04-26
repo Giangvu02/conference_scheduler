@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thêm Phiên họp mới (Session){% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Tạo Phiên họp mới</h1>
+        <a href="{{ path('app_session_index') }}" class="btn btn-outline-secondary">Quay lại danh sách</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        {{ form_row(form.title, {'label': 'Tiêu đề phiên họp'}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_row(form.sessionDate, {'label': 'Ngày tổ chức'}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_row(form.startTime, {'label': 'Giờ bắt đầu'}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_row(form.endTime, {'label': 'Giờ kết thúc'}) }}
+                    </div>
+                    <hr>
+                    <div class="col-md-4 mb-3">
+                        {{ form_row(form.conference, {'label': 'Hội nghị'}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_row(form.speaker, {'label': 'Diễn giả'}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_row(form.room, {'label': 'Phòng'}) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn btn-primary px-4">Lưu lại</button>
+                    <button type="reset" class="btn btn-light">Làm mới form</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

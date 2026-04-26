@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chỉnh sửa Phiên họp{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Chỉnh sửa Phiên họp</h1>
+        <a href="{{ path('app_session_index') }}" class="btn btn-outline-secondary">Quay lại danh sách</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        {{ form_label(form.title, 'Tiêu đề phiên họp') }}
+                        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        {{ form_label(form.sessionDate, 'Ngày tổ chức') }}
+                        {{ form_widget(form.sessionDate, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_label(form.startTime, 'Giờ bắt đầu') }}
+                        {{ form_widget(form.startTime, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_label(form.endTime, 'Giờ kết thúc') }}
+                        {{ form_widget(form.endTime, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form_label(form.conference, 'Hội nghị') }}
+                        {{ form_widget(form.conference, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_label(form.speaker, 'Diễn giả') }}
+                        {{ form_widget(form.speaker, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form_label(form.room, 'Phòng') }}
+                        {{ form_widget(form.room, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn btn-warning px-4">Cập nhật</button>
+                    <a href="{{ path('app_session_index') }}" class="btn btn-link text-muted">Hủy bỏ</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
