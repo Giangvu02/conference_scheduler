@@ -1,0 +1,9 @@
+<h1>Edit Product</h1>
+
+<form method="post">
+    Name: <input type="text" name="name" value="{{ product.name }}"><br>
+    Price: <input type="text" name="price" value="{{ product.price }}"><br>
+    Description: <textarea name="description">{{ product.description }}</textarea><br>
+
+    <button>Update</button>
+</form>

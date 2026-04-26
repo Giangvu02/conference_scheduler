@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Conference List</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Action</th>
+    </tr>
+
+    {% for c in conferences %}
+    <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.title }}</td>
+        <td>{{ c.description }}</td>
+        <td>{{ c.location }}</td>
+        <td>
+            <a href="/conference/delete/{{ c.id }}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">No conference found</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

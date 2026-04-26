@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Session List</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+
+    {% for s in sessions %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.title }}</td>
+        <td>{{ s.sessionDate ? s.sessionDate|date('Y-m-d') : '' }}</td>
+        <td><a href="/session/delete/{{ s.id }}" class="btn btn-danger btn-sm">Delete</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No session found</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

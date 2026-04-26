@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Registration List</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Register Date</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in registrations %}
+    <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.status }}</td>
+        <td>{{ r.registerDate ? r.registerDate|date('Y-m-d') : '' }}</td>
+        <td><a href="/registration/delete/{{ r.id }}" class="btn btn-danger btn-sm">Delete</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No registration found</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

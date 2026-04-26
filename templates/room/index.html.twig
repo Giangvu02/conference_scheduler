@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Room List</h2>
+
+<table class="table table-hover">
+    <tr>
+        <th>ID</th>
+        <th>Room Name</th>
+        <th>Capacity</th>
+        <th>Building</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in rooms %}
+    <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.roomName }}</td>
+        <td>{{ r.capacity }}</td>
+        <td>{{ r.building }}</td>
+        <td><a href="/room/delete/{{ r.id }}" class="btn btn-danger btn-sm">Delete</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No room found</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
