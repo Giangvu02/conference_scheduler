@@ -1,25 +1,46 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Danh sách Đăng ký{% endblock %}
 {% block body %}
-<h2>Registration List</h2>
-
-<table class="table table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>Status</th>
-        <th>Register Date</th>
-        <th>Action</th>
-    </tr>
-
-    {% for r in registrations %}
-    <tr>
-        <td>{{ r.id }}</td>
-        <td>{{ r.status }}</td>
-        <td>{{ r.registerDate ? r.registerDate|date('Y-m-d') : '' }}</td>
-        <td><a href="/registration/delete/{{ r.id }}" class="btn btn-danger btn-sm">Delete</a></td>
-    </tr>
-    {% else %}
-    <tr><td colspan="4">No registration found</td></tr>
-    {% endfor %}
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Đăng ký tham gia</h2>
+        <a href="{{ path('app_registration_add') }}" class="btn btn-success">Thêm mới</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Người dùng</th>
+                <th>Phiên họp</th>
+                <th>Ngày đăng ký</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reg in registrations %}
+            <tr>
+                <td>{{ reg.id }}</td>
+                <td>{{ reg.user ? reg.user.email : '' }}</td>
+                <td>{{ reg.session ? reg.session.title : '' }}</td>
+                <td>{{ reg.registerDate ? reg.registerDate|date('d/m/Y') : '' }}</td>
+                <td>
+                    <span class="badge {{ reg.status == 'Confirmed' ? 'bg-success' : 'bg-warning text-dark' }}">
+                        {{ reg.status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ path('app_registration_edit', {'id': reg.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    <form method="post" action="{{ path('app_registration_delete', {'id': reg.id}) }}" style="display: inline-block" onsubmit="return confirm('Chắc chắn xóa?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reg.id) }}">
+                        <button class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6" class="text-center">Chưa có dữ liệu.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

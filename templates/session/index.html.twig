@@ -1,25 +1,43 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Danh sách Phiên họp{% endblock %}
 {% block body %}
-<h2>Session List</h2>
-
-<table class="table table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
-
-    {% for s in sessions %}
-    <tr>
-        <td>{{ s.id }}</td>
-        <td>{{ s.title }}</td>
-        <td>{{ s.sessionDate ? s.sessionDate|date('Y-m-d') : '' }}</td>
-        <td><a href="/session/delete/{{ s.id }}" class="btn btn-danger btn-sm">Delete</a></td>
-    </tr>
-    {% else %}
-    <tr><td colspan="4">No session found</td></tr>
-    {% endfor %}
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Phiên họp</h2>
+        <a href="{{ path('app_session_add') }}" class="btn btn-success">Thêm mới</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tiêu đề</th>
+                <th>Ngày</th>
+                <th>Giờ</th>
+                <th>Phòng</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.id }}</td>
+                <td>{{ session.title }}</td>
+                <td>{{ session.sessionDate ? session.sessionDate|date('d/m/Y') : '' }}</td>
+                <td>{{ session.startTime ? session.startTime|date('H:i') : '' }} - {{ session.endTime ? session.endTime|date('H:i') : '' }}</td>
+                <td>{{ session.room ? session.room.roomName : 'Chưa xếp' }}</td>
+                <td>
+                    <a href="{{ path('app_session_detail', {'id': session.id}) }}" class="btn btn-sm btn-info text-white">Xem</a>
+                    <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    <form method="post" action="{{ path('app_session_delete', {'id': session.id}) }}" style="display: inline-block" onsubmit="return confirm('Chắc chắn xóa?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ session.id) }}">
+                        <button class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6" class="text-center">Chưa có dữ liệu.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,31 +1,59 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Danh sách Hội nghị{% endblock %}
+
 {% block body %}
-<h2>Conference List</h2>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Hội nghị</h2>
+        <a href="{{ path('app_conference_add') }}" class="btn btn-success">Thêm mới</a>
+    </div>
 
-<table class="table table-bordered">
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Location</th>
-        <th>Action</th>
-    </tr>
-
-    {% for c in conferences %}
-    <tr>
-        <td>{{ c.id }}</td>
-        <td>{{ c.title }}</td>
-        <td>{{ c.description }}</td>
-        <td>{{ c.location }}</td>
-        <td>
-            <a href="/conference/delete/{{ c.id }}" class="btn btn-danger btn-sm">Delete</a>
-        </td>
-    </tr>
-    {% else %}
-    <tr>
-        <td colspan="5">No conference found</td>
-    </tr>
+    {# Hiển thị thông báo (Flash messages) #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endfor %}
-</table>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tiêu đề</th>
+                <th>Địa điểm</th>
+                <th>Ngày bắt đầu</th>
+                <th>Ngày kết thúc</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for conference in conferences %}
+            <tr>
+                <td>{{ conference.id }}</td>
+                <td>{{ conference.title }}</td>
+                <td>{{ conference.location }}</td>
+                <td>{{ conference.startDate ? conference.startDate|date('d/m/Y') : '' }}</td>
+                <td>{{ conference.endDate ? conference.endDate|date('d/m/Y') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_conference_detail', {'id': conference.id}) }}" class="btn btn-sm btn-info text-white">Xem</a>
+                    <a href="{{ path('app_conference_edit', {'id': conference.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    
+                    {# Form xóa an toàn bằng POST #}
+                    <form method="post" action="{{ path('app_conference_delete', {'id': conference.id}) }}" style="display: inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bản ghi này?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conference.id) }}">
+                        <button class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">Không tìm thấy dữ liệu nào.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,31 +1,46 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Danh sách Diễn giả{% endblock %}
+
 {% block body %}
-<h2>Speaker List</h2>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Diễn giả</h2>
+        <a href="{{ path('app_speaker_add') }}" class="btn btn-success">Thêm mới</a>
+    </div>
 
-<a href="/speaker/add" class="btn btn-success mb-3">+ Add New Speaker</a>
+    {% include '_flash_messages.html.twig' ignore missing %}
 
-<table class="table table-striped">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Topic</th>
-        <th>Action</th>
-    </tr>
-
-    {% for s in speakers %}
-    <tr>
-        <td>{{ s.id }}</td>
-        <td>{{ s.name }}</td>
-        <td>{{ s.email }}</td>
-        <td>{{ s.topic }}</td>
-        <td>
-            <a href="/speaker/delete/{{ s.id }}" class="btn btn-danger btn-sm">Delete</a>
-        </td>
-    </tr>
-    {% else %}
-    <tr><td colspan="5">No speaker found</td></tr>
-    {% endfor %}
-</table>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên diễn giả</th>
+                <th>Email</th>
+                <th>Chủ đề</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for speaker in speakers %}
+            <tr>
+                <td>{{ speaker.id }}</td>
+                <td>{{ speaker.name }}</td>
+                <td>{{ speaker.email }}</td>
+                <td>{{ speaker.topic }}</td>
+                <td>
+                    <a href="{{ path('app_speaker_detail', {'id': speaker.id}) }}" class="btn btn-sm btn-info text-white">Xem</a>
+                    <a href="{{ path('app_speaker_edit', {'id': speaker.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    <form method="post" action="{{ path('app_speaker_delete', {'id': speaker.id}) }}" style="display: inline-block" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ speaker.id) }}">
+                        <button class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5" class="text-center">Chưa có dữ liệu.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,27 +1,41 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Danh sách Phòng{% endblock %}
 {% block body %}
-<h2>Room List</h2>
-
-<table class="table table-hover">
-    <tr>
-        <th>ID</th>
-        <th>Room Name</th>
-        <th>Capacity</th>
-        <th>Building</th>
-        <th>Action</th>
-    </tr>
-
-    {% for r in rooms %}
-    <tr>
-        <td>{{ r.id }}</td>
-        <td>{{ r.roomName }}</td>
-        <td>{{ r.capacity }}</td>
-        <td>{{ r.building }}</td>
-        <td><a href="/room/delete/{{ r.id }}" class="btn btn-danger btn-sm">Delete</a></td>
-    </tr>
-    {% else %}
-    <tr><td colspan="5">No room found</td></tr>
-    {% endfor %}
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Phòng</h2>
+        <a href="{{ path('app_room_add') }}" class="btn btn-success">Thêm mới</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên Phòng</th>
+                <th>Sức chứa</th>
+                <th>Tòa nhà</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for room in rooms %}
+            <tr>
+                <td>{{ room.id }}</td>
+                <td>{{ room.roomName }}</td>
+                <td>{{ room.capacity }} người</td>
+                <td>{{ room.building }}</td>
+                <td>
+                    <a href="{{ path('app_room_detail', {'id': room.id}) }}" class="btn btn-sm btn-info text-white">Xem</a>
+                    <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    <form method="post" action="{{ path('app_room_delete', {'id': room.id}) }}" style="display: inline-block" onsubmit="return confirm('Chắc chắn xóa?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ room.id) }}">
+                        <button class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5" class="text-center">Chưa có dữ liệu.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,25 +1,42 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Danh sách Người dùng{% endblock %}
 {% block body %}
-<h2>User List</h2>
-
-<table class="table table-striped">
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Role</th>
-    </tr>
-
-    {% for u in users %}
-    <tr>
-        <td>{{ u.id }}</td>
-        <td>{{ u.username }}</td>
-        <td>{{ u.email }}</td>
-        <td>{{ u.role }}</td>
-    </tr>
-    {% else %}
-    <tr><td colspan="4">No user found</td></tr>
-    {% endfor %}
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Tài khoản</h2>
+        <a href="{{ path('app_user_add') }}" class="btn btn-success">Thêm mới</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Email (Định danh)</th>
+                <th>Quyền (Roles)</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% for role in user.roles %}
+                        <span class="badge bg-secondary">{{ role }}</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
+                    <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display: inline-block" onsubmit="return confirm('Xóa tài khoản này?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                        <button class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4" class="text-center">Chưa có dữ liệu.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
