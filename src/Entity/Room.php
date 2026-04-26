@@ -6,6 +6,7 @@ use App\Repository\RoomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 class Room
@@ -16,12 +17,16 @@ class Room
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Tên phòng không được để trống")]
     private ?string $roomName = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Vui lòng nhập sức chứa")]
+    #[Assert\Positive(message: "Sức chứa phải là số dương")]
     private ?int $capacity = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Vui lòng nhập tên tòa nhà")]
     private ?string $building = null;
 
     #[ORM\OneToMany(mappedBy: 'room', targetEntity: Session::class)]
@@ -49,7 +54,7 @@ class Room
     }
 
     /**
-     * Thêm hàm này để Twig có thể gọi {{ room.name }} hoặc {{ form.vars.value.name }}
+     * Dùng cho Twig hoặc hiển thị chung
      */
     public function getName(): ?string
     {
@@ -98,7 +103,6 @@ class Room
     public function removeSession(Session $session): static
     {
         if ($this->sessions->removeElement($session)) {
-            // set the owning side to null (unless already changed)
             if ($session->getRoom() === $this) {
                 $session->setRoom(null);
             }
@@ -106,9 +110,6 @@ class Room
         return $this;
     }
 
-    /**
-     * Hàm này giúp hiển thị tên phòng khi dùng EntityType trong Form
-     */
     public function __toString(): string
     {
         return (string) $this->roomName;
