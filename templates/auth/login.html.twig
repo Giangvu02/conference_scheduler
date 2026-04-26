@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5" style="max-width:500px;">
+    <h2 class="text-center mb-4">Conference Scheduler Login</h2>
+
+    {% if error %}
+        <div class="alert alert-danger">
+            Invalid email or password!
+        </div>
+    {% endif %}
+
+    <form method="post" action="{{ path('app_login') }}">
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ last_username }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="mb-3">
+            <input type="checkbox" name="_remember_me"> Remember Me
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>
+{% endblock %}

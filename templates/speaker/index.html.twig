@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Speaker List</h2>
+
+<a href="/speaker/add" class="btn btn-success mb-3">+ Add New Speaker</a>
+
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Topic</th>
+        <th>Action</th>
+    </tr>
+
+    {% for s in speakers %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.topic }}</td>
+        <td>
+            <a href="/speaker/delete/{{ s.id }}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No speaker found</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
