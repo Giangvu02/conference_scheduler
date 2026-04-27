@@ -30,7 +30,7 @@ class Conference
     #[ORM\Column(length: 255)]
     private ?string $location = null;
 
-    #[ORM\OneToMany(mappedBy: 'conference', targetEntity: Session::class)]
+    #[ORM\OneToMany(mappedBy: 'conference', targetEntity: Session::class, cascade: ['remove'])]
     private Collection $sessions;
 
     public function __construct()

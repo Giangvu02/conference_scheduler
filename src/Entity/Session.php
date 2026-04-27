@@ -36,7 +36,7 @@ class Session
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     private ?Room $room = null;
 
-    #[ORM\OneToMany(mappedBy: 'session', targetEntity: Registration::class)]
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: Registration::class, cascade: ['remove'])]
     private Collection $registrations;
 
     public function __construct()
