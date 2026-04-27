@@ -29,7 +29,7 @@ class Room
     #[Assert\NotBlank(message: "Vui lòng nhập tên tòa nhà")]
     private ?string $building = null;
 
-    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Session::class)]
+    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Session::class, cascade: ['remove'])]
     private Collection $sessions;
 
     public function __construct()

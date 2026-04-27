@@ -30,7 +30,7 @@ class Speaker
     #[ORM\Column(length:255, nullable:true)]
     private ?string $photo = null;
 
-    #[ORM\OneToMany(mappedBy:'speaker', targetEntity: Session::class)]
+    #[ORM\OneToMany(mappedBy:'speaker', targetEntity: Session::class, cascade: ['remove'])]
     private Collection $sessions;
 
     public function __construct()
