@@ -1,38 +1,64 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Chỉnh sửa đăng ký{% endblock %}
-
+{% block title %}Edit Registration{% endblock %}
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-warning text-dark">
-                    <h3 class="mb-0"><i class="fas fa-edit"></i> Chỉnh sửa đăng ký #{{ form.vars.value.id }}</h3>
-                </div>
-                <div class="card-body p-4">
-                    <div class="alert alert-info mb-4">
-                        <strong>Ngày đăng ký ban đầu:</strong> {{ form.vars.value.registerDate|date('d/m/Y H:i') }}
+<style>
+    .edit-container { max-width: 580px; margin: 60px auto; padding: 0 20px; font-family: 'Inter', sans-serif; }
+    .edit-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    
+    .edit-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 24px; text-align: center; }
+    
+    .info-alert { background: #eff6ff; border: 1px solid #dbeafe; color: #1e40af; border-radius: 8px; padding: 14px; font-size: 0.8125rem; margin-bottom: 24px; }
 
-                    {{ form_start(form) }}
-                        <div class="mb-3">
-                            {{ form_label(form.user, 'Người dùng') }}
-                            {{ form_widget(form.user, {'attr': {'class': 'form-select'}}) }}
-                        </div>
+    label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 8px; margin-top: 20px; }
+    .form-select {
+        width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;
+        font-size: 0.9375rem; transition: all 0.2s;
+    }
+    .form-select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-                        <div class="mb-3">
-                            {{ form_label(form.session, 'Phiên họp') }}
-                            {{ form_widget(form.session, {'attr': {'class': 'form-select'}}) }}
-                        </div>
+    .btn-group-formal { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
+    .btn-update { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { color: #64748b; text-decoration: none; font-size: 0.875rem; }
+</style>
 
-                        <div class="d-flex justify-content-between align-items-center mt-4">
-                            <a href="{{ path('app_registration_index') }}" class="btn btn-outline-secondary">Hủy bỏ</a>
-                            <button type="submit" class="btn btn-primary px-4">Cập nhật thông tin</button>
-                        </div>
-                    {{ form_end(form) }}
-                </div>
-            </div>
+<div class="edit-container">
+    <div class="edit-card">
+        <h1 class="edit-title">Edit Registration #{{ form.vars.value.id }}</h1>
+        
+        <div class="info-alert">
+            <strong>Original Registration Date:</strong> {{ form.vars.value.registerDate|date('M d, Y H:i') }}
         </div>
+
+        {{ form_start(form) }}
+            <div>
+                {{ form_label(form.user, 'Participant Account') }}
+                {{ form_widget(form.user, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.user) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.session, 'Assigned Session') }}
+                {{ form_widget(form.session, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.session) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.registerDate, 'Registration Date') }}
+                {{ form_widget(form.registerDate, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.registerDate) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.status, 'Status') }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.status) }}</div>
+            </div>
+
+            <div class="btn-group-formal">
+                <a href="{{ path('app_registration_index') }}" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-update">Update Registration</button>
+            </div>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

@@ -1,41 +1,61 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Đăng ký mới{% endblock %}
-
+{% block title %}Create Registration{% endblock %}
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-success text-white">
-                    <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Tạo đơn đăng ký mới</h3>
-                </div>
-                <div class="card-body p-4">
-                    {{ form_start(form) }}
-                        <div class="mb-3">
-                            {{ form_label(form.user, 'Chọn người dùng tham gia') }}
-                            {{ form_widget(form.user, {'attr': {'class': 'form-select'}}) }}
-                            {{ form_errors(form.user) }}
-                        </div>
+<style>
+    .form-container { max-width: 580px; margin: 60px auto; padding: 0 20px; font-family: 'Inter', sans-serif; }
+    .form-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    
+    .form-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 8px; text-align: center; }
+    .form-subtitle { font-size: 0.875rem; color: #64748b; text-align: center; margin-bottom: 32px; }
 
-                        <div class="mb-3">
-                            {{ form_label(form.session, 'Chọn phiên họp (Session)') }}
-                            {{ form_widget(form.session, {'attr': {'class': 'form-select'}}) }}
-                            {{ form_errors(form.session) }}
-                        </div>
+    label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 8px; margin-top: 20px; }
+    .form-select {
+        width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;
+        background-color: #fff; font-size: 0.9375rem; color: #1e293b; transition: all 0.2s;
+    }
+    .form-select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-                        <div class="d-flex justify-content-between align-items-center mt-4">
-                            <a href="{{ path('app_registration_index') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left"></i> Quay lại
-                            </a>
-                            <button type="submit" class="btn btn-success px-4">
-                                Xác nhận đăng ký
-                            </button>
-                        </div>
-                    {{ form_end(form) }}
-                </div>
+    .btn-group-formal { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
+    .btn-submit { background: #1e293b; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-submit:hover { background: #0f172a; }
+    .btn-back { color: #64748b; text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+</style>
+
+<div class="form-container">
+    <div class="form-card">
+        <h1 class="form-title">New Registration</h1>
+        <p class="form-subtitle">Fill in the details to register a participant for a session.</p>
+
+        {{ form_start(form) }}
+            <div>
+                {{ form_label(form.user, 'Select Participant') }}
+                {{ form_widget(form.user, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.user) }}</div>
             </div>
-        </div>
+
+            <div>
+                {{ form_label(form.session, 'Assigned Session') }}
+                {{ form_widget(form.session, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.session) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.registerDate, 'Registration Date') }}
+                {{ form_widget(form.registerDate, {'attr': {'class': 'form-select'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.registerDate) }}</div>
+            </div>
+
+            <div>
+                {{ form_label(form.status, 'Status') }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-select', 'placeholder': 'e.g. Confirmed or Pending'}}) }}
+                <div style="color: #dc2626; font-size: 0.75rem; margin-top: 4px;">{{ form_errors(form.status) }}</div>
+            </div>
+
+            <div class="btn-group-formal">
+                <a href="{{ path('app_registration_index') }}" class="btn-back">← Back to List</a>
+                <button type="submit" class="btn-submit">Confirm Registration</button>
+            </div>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

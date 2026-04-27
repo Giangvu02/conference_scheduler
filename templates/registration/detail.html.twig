@@ -1,19 +1,47 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
-<div class="container mt-4">
-    <div class="card shadow-sm border-info">
-        <div class="card-header bg-info text-white"><h3>Chi tiết đơn đăng ký #{{ reg.id }}</h3></div>
-        <div class="card-body">
-            <table class="table table-borderless">
-                <tr><th>Email người dùng:</th><td>{{ reg.user.email }}</td></tr>
-                <tr><th>Phiên họp tham gia:</th><td>{{ reg.session.title }}</td></tr>
-                <tr><th>Ngày đăng ký:</th><td>{{ reg.registrationDate|date('d/m/Y H:i') }}</td></tr>
-            </table>
-            <hr>
-            <a href="{{ path('app_registration_index') }}" class="btn btn-secondary">Quay lại</a>
-            <a href="{{ path('app_registration_edit', {id: reg.id}) }}" class="btn btn-warning">Chỉnh sửa</a>
+<style>
+    .detail-container { max-width: 700px; margin: 50px auto; padding: 0 20px; font-family: 'Inter', sans-serif; }
+    .detail-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    
+    .detail-header { background: #f8fafc; padding: 20px 24px; border-bottom: 1px solid #e2e8f0; }
+    .detail-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0; }
+
+    .property-list { padding: 8px 0; }
+    .property-item { display: grid; grid-template-columns: 220px 1fr; padding: 16px 24px; border-bottom: 1px solid #f1f5f9; }
+    .property-item:last-child { border-bottom: none; }
+    .property-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.025em; }
+    .property-value { font-size: 0.9375rem; color: #1e293b; font-weight: 500; }
+
+    .action-bar { margin-top: 24px; display: flex; gap: 12px; }
+    .btn-edit { background: #1e293b; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.875rem; }
+    .btn-secondary { border: 1px solid #e2e8f0; color: #475569; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 0.875rem; }
+</style>
+
+<div class="detail-container">
+    <div class="detail-card">
+        <div class="detail-header">
+            <h3 class="detail-title">Registration Record #{{ registration.id }} </h3>
         </div>
+        <div class="property-list">
+            <div class="property-item">
+                <span class="property-label">Participant Email</span>
+                <span class="property-value">{{ registration.user ? registration.user.email : "N/A" }} </span>
+            </div>
+            <div class="property-item">
+                <span class="property-label">Enrolled Session</span>
+                <span class="property-value">{{ registration.session ? registration.session.title : "N/A" }} </span>
+            </div>
+            <div class="property-item">
+                <span class="property-label">Registration Date</span>
+                <span class="property-value">{{ registration.registerDate|date('F d, Y H:i') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <a href="{{ path('app_registration_index') }}" class="btn-secondary">← Back to List</a>
+        <a href="{{ path('app_registration_edit', {id: registration.id}) }}" class="btn-edit">Edit Registration</a>
     </div>
 </div>
 {% endblock %}

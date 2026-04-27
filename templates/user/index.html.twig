@@ -1,43 +1,99 @@
 {% extends 'base.html.twig' %}
-{% block title %}Danh sách Người dùng{% endblock %}
-{% block body %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Danh sách Tài khoản</h2>
-        <a href="{{ path('app_user_add') }}" class="btn btn-success">Thêm mới</a>
-    </div>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Email (Định danh)</th>
-                <th>Quyền (Roles)</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                    {% for role in user.roles %}
-                        <span class="badge bg-secondary">{{ role }}</span>
-                    {% endfor %}
-                </td>
-                <td>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
-                    <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display: inline-block" onsubmit="return confirm('Xóa tài khoản này?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                        <button class="btn btn-sm btn-danger">Xóa</button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr><td colspan="4" class="text-center">Chưa có dữ liệu.</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
 
+{% block title %}Account Directory{% endblock %}
+
+{% block body %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  
+  :root {
+    --primary-navy: #0f172a;
+    --accent-blue: #2563eb;
+    --text-slate: #64748b;
+    --bg-page: #f8fafc;
+    --border-color: #e2e8f0;
+  }
+
+  body { background-color: var(--bg-page) !important; font-family: 'Inter', sans-serif; }
+  .management-wrapper { max-width: 1100px; margin: 40px auto; padding: 0 24px; }
+  
+  .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+  .header-content h2 { font-size: 1.875rem; font-weight: 700; color: var(--primary-navy); letter-spacing: -0.02em; margin: 0; }
+  .header-content p { color: var(--text-slate); font-size: 0.875rem; margin-top: 4px; }
+
+  .btn-primary-sm {
+    background: var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px;
+    font-weight: 600; text-decoration: none; font-size: 0.875rem; transition: background 0.2s;
+  }
+  .btn-primary-sm:hover { background: #1d4ed8; }
+
+  .data-card { background: white; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .user-table { width: 100%; border-collapse: collapse; }
+  .user-table th {
+    background: #f1f5f9; padding: 14px 20px; text-align: left;
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-slate);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .user-table td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.875rem; color: #1e293b; }
+  
+  .role-badge { 
+    background: #f1f5f9; color: #475569; padding: 3px 10px; border-radius: 6px; 
+    font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin-right: 4px;
+  }
+
+  .action-cell { display: flex; gap: 12px; }
+  .action-link { text-decoration: none; font-weight: 600; font-size: 0.8125rem; color: var(--accent-blue); }
+  .action-link.delete { color: #dc2626; border: none; background: none; cursor: pointer; padding: 0; font-family: inherit; }
+</style>
+
+<div class="management-wrapper">
+    <div class="page-header">
+        <div class="header-content">
+            <h2>Account Directory</h2>
+            <p>Overview and management of system users and access privileges.</p>
+        </div>
+        <a href="{{ path('app_user_add') }}" class="btn-primary-sm">+ Add New Account</a>
+    </div>
+
+    <div class="data-card">
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email Address</th>
+                    <th>Assigned Roles</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td style="color: var(--text-slate)">#{{ user.id }}</td>
+                    <td style="font-weight: 500">{{ user.email }}</td>
+                    <td>
+                        {% for role in user.roles %}
+                            <span class="role-badge">{{ role }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <div class="action-cell">
+                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="action-link">Edit</a>
+                            <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display: inline-block" onsubmit="return confirm('Permanently remove this account?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button class="action-link delete">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align:center; padding: 48px; color: var(--text-slate)">
+                        No user accounts found in the database.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

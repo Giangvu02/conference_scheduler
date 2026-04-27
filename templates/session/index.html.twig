@@ -1,43 +1,119 @@
 {% extends 'base.html.twig' %}
-{% block title %}Danh sách Phiên họp{% endblock %}
+
+{% block title %}Danh Sách Phiên Họp{% endblock %}
+
 {% block body %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Danh sách Phiên họp</h2>
-        <a href="{{ path('app_session_add') }}" class="btn btn-success">Thêm mới</a>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  body { background: var(--bg) !important; font-family: 'Inter', sans-serif; color: var(--text-main); }
+
+  .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .page-title { font-weight: 700; font-size: 1.875rem; letter-spacing: -0.02em; margin: 0; }
+  .page-subtitle { color: var(--text-muted); font-size: 0.875rem; margin-top: 4px; }
+
+  .btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+  }
+
+  .btn-add:hover { background: var(--primary-hover); }
+
+  .table-container {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .session-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .session-table th {
+    padding: 16px;
+    background: #f1f5f9;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .session-table td { padding: 16px; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+
+  .actions { display: flex; gap: 12px; }
+  .action-link { text-decoration: none; font-weight: 500; font-size: 0.8125rem; color: var(--primary); }
+  .action-link.delete { color: #dc2626; }
+</style>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Quản Lý Phiên Họp</h1>
+      <p class="page-subtitle">Xem và quản lý tất cả phiên họp đã tạo</p>
     </div>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Tiêu đề</th>
-                <th>Ngày</th>
-                <th>Giờ</th>
-                <th>Phòng</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
+    <a href="{{ path('app_session_add') }}" class="btn-add">+ Thêm Phiên Họp</a>
+  </div>
+
+  <div class="table-container">
+    <table class="session-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tiêu Đề</th>
+          <th>Ngày</th>
+          <th>Giờ</th>
+          <th>Phòng</th>
+          <th>Hành Động</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for session in sessions %}
-            <tr>
-                <td>{{ session.id }}</td>
-                <td>{{ session.title }}</td>
-                <td>{{ session.sessionDate ? session.sessionDate|date('d/m/Y') : '' }}</td>
-                <td>{{ session.startTime ? session.startTime|date('H:i') : '' }} - {{ session.endTime ? session.endTime|date('H:i') : '' }}</td>
-                <td>{{ session.room ? session.room.roomName : 'Chưa xếp' }}</td>
-                <td>
-                    <a href="{{ path('app_session_detail', {'id': session.id}) }}" class="btn btn-sm btn-info text-white">Xem</a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
-                    <form method="post" action="{{ path('app_session_delete', {'id': session.id}) }}" style="display: inline-block" onsubmit="return confirm('Chắc chắn xóa?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ session.id) }}">
-                        <button class="btn btn-sm btn-danger">Xóa</button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+          <td style="color: var(--text-muted)">#{{ session.id }}</td>
+          <td style="font-weight: 500">{{ session.title }}</td>
+          <td>{{ session.sessionDate ? session.sessionDate|date('d/m/Y') : '-' }}</td>
+          <td>{{ session.startTime ? session.startTime|date('H:i') : '-' }} - {{ session.endTime ? session.endTime|date('H:i') : '-' }}</td>
+          <td>{{ session.room ? session.room.roomName : 'Chưa xếp' }}</td>
+          <td>
+            <div class="actions">
+              <a href="{{ path('app_session_detail', {'id': session.id}) }}" class="action-link">Xem</a>
+              <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="action-link">Sửa</a>
+              <form method="post" action="{{ path('app_session_delete', {'id': session.id}) }}" style="display:inline" onsubmit="return confirm('Xóa phiên họp này?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ session.id) }}">
+                <button type="submit" class="action-link delete" style="background:none; border:none; padding:0; cursor:pointer;">Xóa</button>
+              </form>
+            </div>
+          </td>
+        </tr>
         {% else %}
-            <tr><td colspan="6" class="text-center">Chưa có dữ liệu.</td></tr>
+        <tr>
+          <td colspan="6" style="text-align:center; padding: 48px; color: var(--text-muted)">
+            Chưa có dữ liệu.
+          </td>
+        </tr>
         {% endfor %}
-        </tbody>
+      </tbody>
     </table>
+  </div>
 </div>
 {% endblock %}

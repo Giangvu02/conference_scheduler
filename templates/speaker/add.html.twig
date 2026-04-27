@@ -1,10 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<h2>Add New Speaker</h2>
+{% block title %}Thêm Diễn Giả Mới{% endblock %}
 
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-primary mt-3">Save Speaker</button>
-{{ form_end(form) }}
+{% block body %}
+<style>
+  .form-wrapper { max-width: 640px; margin: 40px auto; padding: 0 24px; font-family: 'Inter', sans-serif; }
+  .form-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  
+  .form-header { margin-bottom: 24px; }
+  .form-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
+  
+  label { display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 8px; margin-top: 16px; }
+  input, textarea, select {
+    width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9375rem; box-sizing: border-box;
+  }
+  input:focus, textarea:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+  .button-group { display: flex; gap: 12px; margin-top: 32px; border-top: 1px solid #e2e8f0; padding-top: 24px; }
+  .btn-save { background: #2563eb; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 500; cursor: pointer; }
+  .btn-cancel { background: white; color: #64748b; border: 1px solid #e2e8f0; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-size: 0.875rem; }
+</style>
+
+<div class="form-wrapper">
+  <div class="form-header">
+    <h1 class="form-title">Thêm Diễn Giả Mới</h1>
+  </div>
+  
+  <div class="form-card">
+    {{ form_start(form) }}
+      {{ form_widget(form) }}
+      <div class="button-group">
+        <button type="submit" class="btn-save">Lưu Thay Đổi</button>
+        <a href="{{ path('app_speaker_index') }}" class="btn-cancel">Hủy</a>
+      </div>
+    {{ form_end(form) }}
+  </div>
+</div>
 {% endblock %}

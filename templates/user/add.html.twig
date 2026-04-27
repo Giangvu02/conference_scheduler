@@ -1,26 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Thêm mới Người dùng{% endblock %}
+{% block title %}Create Account{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h2>Thêm mới Người dùng</h2>
+<style>
+    .form-wrapper { max-width: 580px; margin: 60px auto; padding: 0 24px; font-family: 'Inter', sans-serif; }
+    .form-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    
+    .form-header { text-align: center; margin-bottom: 32px; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px; }
+    .form-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
+    .form-subtitle { color: #64748b; font-size: 0.875rem; margin-top: 6px; }
 
-    <div class="card mt-3">
-        <div class="card-body">
-            {# form_start mở thẻ <form>, sinh CSRF token tự động #}
-            {{ form_start(form) }}
-            
-                {# form_widget hiển thị tất cả các trường input #}
-                {{ form_widget(form) }}
-                
-                <div class="mt-3">
-                    <button class="btn btn-success" type="submit">Lưu dữ liệu</button>
-                    <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Hủy bỏ</a>
-                </div>
-                
-            {{ form_end(form) }}
+    label { display: block; font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 8px; margin-top: 20px; letter-spacing: 0.025em; }
+    input, select {
+        width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px;
+        font-size: 0.9375rem; transition: all 0.2s; box-sizing: border-box;
+    }
+    input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+    .action-panel { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
+    .btn-save { background: #1e293b; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-save:hover { background: #0f172a; }
+    .btn-cancel { color: #64748b; text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+</style>
+
+<div class="form-wrapper">
+    <div class="form-card">
+        <div class="form-header">
+            <h1 class="form-title">Register Account</h1>
+            <p class="form-subtitle">Create a new identity for system access.</p>
         </div>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            
+            <div class="action-panel">
+                <a href="{{ path('app_user_index') }}" class="btn-cancel">Discard Changes</a>
+                <button type="submit" class="btn-save">Save Account</button>
+            </div>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Speaker Profile{% endblock %}
+
+{% block body %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    .edit-container { 
+        max-width: 640px; 
+        margin: 60px auto; 
+        padding: 0 24px; 
+        font-family: 'Inter', sans-serif; 
+    }
+    
+    .edit-card { 
+        background: white; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 12px; 
+        padding: 40px; 
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); 
+    }
+    
+    .edit-header { 
+        border-bottom: 1px solid #f1f5f9; 
+        padding-bottom: 24px; 
+        margin-bottom: 32px; 
+        text-align: center; 
+    }
+    
+    .edit-title { 
+        font-size: 1.5rem; 
+        font-weight: 700; 
+        color: #0f172a; 
+        margin: 0; 
+    }
+    
+    .edit-subtitle { 
+        color: #64748b; 
+        font-size: 0.875rem; 
+        margin-top: 6px; 
+    }
+
+    /* Form Styling */
+    label { 
+        display: block; 
+        font-size: 0.8125rem; 
+        font-weight: 600; 
+        text-transform: uppercase; 
+        color: #475569; 
+        margin-bottom: 8px; 
+        margin-top: 20px; 
+        letter-spacing: 0.025em;
+    }
+    
+    input, select, textarea {
+        width: 100%; 
+        padding: 12px 16px; 
+        border: 1px solid #cbd5e1; 
+        border-radius: 8px;
+        font-size: 0.9375rem; 
+        color: #1e293b; 
+        transition: all 0.2s;
+        box-sizing: border-box;
+    }
+    
+    input:focus, textarea:focus { 
+        border-color: #2563eb; 
+        outline: none; 
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); 
+    }
+
+    .form-actions { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-top: 40px; 
+        padding-top: 24px; 
+        border-top: 1px solid #f1f5f9; 
+    }
+    
+    .btn-update { 
+        background: #2563eb; 
+        color: white; 
+        border: none; 
+        padding: 12px 32px; 
+        border-radius: 8px; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: background 0.2s;
+    }
+    
+    .btn-update:hover {
+        background: #1d4ed8;
+    }
+    
+    .btn-cancel { 
+        color: #64748b; 
+        text-decoration: none; 
+        font-size: 0.875rem; 
+        font-weight: 500; 
+    }
+    
+    .btn-cancel:hover {
+        color: #0f172a;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+        color: #0f172a;
+        background: #f1f5f9;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        margin-bottom: 16px;
+    }
+</style>
+
+<div class="edit-container">
+    <a href="{{ path('app_speaker_index') }}" class="btn-back">
+        <span>← Quay Lại</span>
+    </a>
+    
+    <div class="edit-card">
+        <div class="edit-header">
+            <h1 class="edit-title">Cập Nhật Hồ Sơ Diễn Giả</h1>
+            <p class="edit-subtitle">Đang chỉnh sửa: <strong>{{ speaker.name }}</strong></p>
+        </div>
+
+        {{ form_start(form) }}
+            <div>
+                {{ form_label(form.name, 'Tên Đầy Đủ') }}
+                {{ form_widget(form.name) }}
+            </div>
+
+            <div>
+                {{ form_label(form.email, 'Địa Chỉ Email') }}
+                {{ form_widget(form.email) }}
+            </div>
+
+            <div>
+                {{ form_label(form.topic, 'Chủ Đề Chuyên Môn') }}
+                {{ form_widget(form.topic) }}
+            </div>
+
+            <div>
+                {{ form_label(form.biography, 'Tiểu Sử Diễn Giả') }}
+                {{ form_widget(form.biography, {'attr': {'rows': '5'}}) }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ path('app_speaker_index') }}" class="btn-cancel">Hủy Thay Đổi</a>
+                <button type="submit" class="btn-update">Lưu Thay Đổi</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

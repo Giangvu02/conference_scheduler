@@ -1,20 +1,41 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Sửa Phòng{% endblock %}
-
+{% block title %}Update Room{% endblock %}
 {% block body %}
-<div class="container mt-4">
-    <div class="card shadow">
-        <div class="card-header bg-warning"><h2>Chỉnh sửa: {{ form.vars.value.name }}</h2></div>
-        <div class="card-body">
-            {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <div class="mt-3">
-                    <button class="btn btn-primary">Cập nhật</button>
-                    <a href="{{ path('app_room_index') }}" class="btn btn-secondary">Hủy</a>
-                </div>
-            {{ form_end(form) }}
+<style>
+    .edit-wrapper { max-width: 580px; margin: 60px auto; padding: 0 20px; font-family: 'Inter', sans-serif; }
+    .edit-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+    
+    .edit-header { border-bottom: 1px solid #f1f5f9; padding-bottom: 24px; margin-bottom: 32px; }
+    .edit-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
+    .edit-subtitle { color: #64748b; font-size: 0.875rem; margin-top: 4px; }
+
+    label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 8px; margin-top: 20px; }
+    input, select {
+        width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;
+        font-size: 0.9375rem; transition: all 0.2s;
+    }
+    input:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+    .form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #f1f5f9; }
+    .btn-update { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { color: #64748b; text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+</style>
+
+<div class="edit-wrapper">
+    <div class="edit-card">
+        <div class="edit-header">
+            <h1 class="edit-title">Update Room Details</h1>
+            <p class="edit-subtitle">Modifying: <strong>{{ form.vars.value.roomName }}</strong> [cite: 34]</p>
         </div>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            
+            <div class="form-actions">
+                <a href="{{ path('app_room_index') }}" class="btn-cancel">Discard Changes [cite: 35]</a>
+                <button type="submit" class="btn-update">Apply Updates [cite: 35]</button>
+            </div>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

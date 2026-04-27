@@ -19,11 +19,13 @@ class RegistrationType extends AbstractType
             ->add('status')
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'email',
+                'placeholder' => '-- Select Participant --',
             ])
             ->add('session', EntityType::class, [
                 'class' => Session::class,
-                'choice_label' => 'id',
+                'choice_label' => 'title',
+                'placeholder' => '-- Select Session --',
             ])
         ;
     }

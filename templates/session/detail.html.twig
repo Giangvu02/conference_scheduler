@@ -1,19 +1,111 @@
 {% extends 'base.html.twig' %}
-{% block title %}Chi tiết Phiên họp{% endblock %}
+
+{% block title %}Chi Tiết Phiên Họp{% endblock %}
+
 {% block body %}
-<div class="container mt-4">
-    <h2>Phiên họp: {{ session.title }}</h2>
-    <table class="table table-bordered mt-3">
-        <tbody>
-            <tr><th style="width: 200px;">Hội nghị</th><td>{{ session.conference ? session.conference.title : '' }}</td></tr>
-            <tr><th>Diễn giả</th><td>{{ session.speaker ? session.speaker.name : '' }}</td></tr>
-            <tr><th>Phòng</th><td>{{ session.room ? session.room.roomName : '' }}</td></tr>
-            <tr><th>Ngày diễn ra</th><td>{{ session.sessionDate ? session.sessionDate|date('d/m/Y') : '' }}</td></tr>
-            <tr><th>Thời gian</th><td>{{ session.startTime ? session.startTime|date('H:i') : '' }} đến {{ session.endTime ? session.endTime|date('H:i') : '' }}</td></tr>
-        </tbody>
-    </table>
-    <div class="mt-3">
-        <a href="{{ path('app_session_index') }}" class="btn btn-secondary">Quay lại</a>
+<style>
+  :root {
+    --primary: #2563eb;
+    --bg: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  body { background: var(--bg) !important; font-family: 'Inter', sans-serif; color: var(--text-main); }
+  
+  .detail-wrapper { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+  
+  .detail-header {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .detail-title { font-size: 1.875rem; font-weight: 700; margin: 0; }
+  
+  .detail-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .detail-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .detail-row:last-child { border-bottom: none; }
+  
+  .detail-label {
+    width: 200px;
+    padding: 16px;
+    background: #f1f5f9;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  
+  .detail-value {
+    flex: 1;
+    padding: 16px;
+    font-size: 0.9375rem;
+    color: var(--text-main);
+  }
+  
+  .btn-back {
+    background: var(--primary);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+  }
+  
+  .btn-back:hover { background: #1d4ed8; }
+</style>
+
+<div class="detail-wrapper">
+  <div class="detail-header">
+    <h1 class="detail-title">Chi Tiết Phiên Họp</h1>
+    <a href="{{ path('app_session_index') }}" class="btn-back">← Quay Lại</a>
+  </div>
+  
+  <div class="detail-card">
+    <div class="detail-row">
+      <div class="detail-label">ID</div>
+      <div class="detail-value">#{{ session.id }}</div>
     </div>
+    <div class="detail-row">
+      <div class="detail-label">Tiêu Đề</div>
+      <div class="detail-value">{{ session.title }}</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Hội Thảo</div>
+      <div class="detail-value">{{ session.conference ? session.conference.title : '-' }}</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Diễn Giả</div>
+      <div class="detail-value">{{ session.speaker ? session.speaker.name : '-' }}</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Phòng</div>
+      <div class="detail-value">{{ session.room ? session.room.roomName : 'Chưa xếp' }}</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Ngày</div>
+      <div class="detail-value">{{ session.sessionDate ? session.sessionDate|date('d/m/Y') : '-' }}</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-label">Thời Gian</div>
+      <div class="detail-value">{{ session.startTime ? session.startTime|date('H:i') : '-' }} - {{ session.endTime ? session.endTime|date('H:i') : '-' }}</div>
+    </div>
+  </div>
 </div>
 {% endblock %}

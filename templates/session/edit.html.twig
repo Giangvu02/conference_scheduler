@@ -1,56 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Chỉnh sửa Phiên họp{% endblock %}
+{% block title %}Chỉnh Sửa Phiên Họp{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Chỉnh sửa Phiên họp</h1>
-        <a href="{{ path('app_session_index') }}" class="btn btn-outline-secondary">Quay lại danh sách</a>
-    </div>
+<style>
+  .form-wrapper { max-width: 640px; margin: 40px auto; padding: 0 24px; font-family: 'Inter', sans-serif; }
+  .form-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  
+  .form-header { margin-bottom: 24px; }
+  .form-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
+  
+  label { display: block; font-size: 0.875rem; font-weight: 500; color: #334155; margin-bottom: 8px; margin-top: 16px; }
+  input, textarea, select {
+    width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9375rem; box-sizing: border-box;
+  }
+  input:focus, textarea:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            {{ form_start(form) }}
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        {{ form_label(form.title, 'Tiêu đề phiên họp') }}
-                        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    
-                    <div class="col-md-4 mb-3">
-                        {{ form_label(form.sessionDate, 'Ngày tổ chức') }}
-                        {{ form_widget(form.sessionDate, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form_label(form.startTime, 'Giờ bắt đầu') }}
-                        {{ form_widget(form.startTime, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form_label(form.endTime, 'Giờ kết thúc') }}
-                        {{ form_widget(form.endTime, {'attr': {'class': 'form-control'}}) }}
-                    </div>
+  .button-group { display: flex; gap: 12px; margin-top: 32px; border-top: 1px solid #e2e8f0; padding-top: 24px; }
+  .btn-save { background: #2563eb; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 500; cursor: pointer; }
+  .btn-cancel { background: white; color: #64748b; border: 1px solid #e2e8f0; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-size: 0.875rem; }
+</style>
 
-                    <div class="col-md-4 mb-3">
-                        {{ form_label(form.conference, 'Hội nghị') }}
-                        {{ form_widget(form.conference, {'attr': {'class': 'form-select'}}) }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form_label(form.speaker, 'Diễn giả') }}
-                        {{ form_widget(form.speaker, {'attr': {'class': 'form-select'}}) }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form_label(form.room, 'Phòng') }}
-                        {{ form_widget(form.room, {'attr': {'class': 'form-select'}}) }}
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <button class="btn btn-warning px-4">Cập nhật</button>
-                    <a href="{{ path('app_session_index') }}" class="btn btn-link text-muted">Hủy bỏ</a>
-                </div>
-            {{ form_end(form) }}
-        </div>
-    </div>
+<div class="form-wrapper">
+  <div class="form-header">
+    <h1 class="form-title">Chỉnh Sửa Phiên Họp</h1>
+  </div>
+  
+  <div class="form-card">
+    {{ form_start(form) }}
+      {{ form_widget(form) }}
+      <div class="button-group">
+        <button type="submit" class="btn-save">Cập Nhật</button>
+        <a href="{{ path('app_session_index') }}" class="btn-cancel">Hủy</a>
+      </div>
+    {{ form_end(form) }}
+  </div>
 </div>
 {% endblock %}

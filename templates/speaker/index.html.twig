@@ -1,46 +1,117 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Danh sách Diễn giả{% endblock %}
+{% block title %}Danh Sách Diễn Giả{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Danh sách Diễn giả</h2>
-        <a href="{{ path('app_speaker_add') }}" class="btn btn-success">Thêm mới</a>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+  }
+
+  body { background: var(--bg) !important; font-family: 'Inter', sans-serif; color: var(--text-main); }
+
+  .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .page-title { font-weight: 700; font-size: 1.875rem; letter-spacing: -0.02em; margin: 0; }
+  .page-subtitle { color: var(--text-muted); font-size: 0.875rem; margin-top: 4px; }
+
+  .btn-add {
+    background: var(--primary);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+  }
+
+  .btn-add:hover { background: var(--primary-hover); }
+
+  .table-container {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .speaker-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .speaker-table th {
+    padding: 16px;
+    background: #f1f5f9;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .speaker-table td { padding: 16px; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+
+  .actions { display: flex; gap: 12px; }
+  .action-link { text-decoration: none; font-weight: 500; font-size: 0.8125rem; color: var(--primary); }
+  .action-link.delete { color: #dc2626; }
+</style>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Quản Lý Diễn Giả</h1>
+      <p class="page-subtitle">Xem và quản lý tất cả diễn giả đã đăng ký</p>
     </div>
+    <a href="{{ path('app_speaker_add') }}" class="btn-add">+ Thêm Diễn Giả</a>
+  </div>
 
-    {% include '_flash_messages.html.twig' ignore missing %}
-
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Tên diễn giả</th>
-                <th>Email</th>
-                <th>Chủ đề</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
+  <div class="table-container">
+    <table class="speaker-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên Diễn Giả</th>
+          <th>Email</th>
+          <th>Chủ Đề</th>
+          <th>Hành Động</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for speaker in speakers %}
-            <tr>
-                <td>{{ speaker.id }}</td>
-                <td>{{ speaker.name }}</td>
-                <td>{{ speaker.email }}</td>
-                <td>{{ speaker.topic }}</td>
-                <td>
-                    <a href="{{ path('app_speaker_detail', {'id': speaker.id}) }}" class="btn btn-sm btn-info text-white">Xem</a>
-                    <a href="{{ path('app_speaker_edit', {'id': speaker.id}) }}" class="btn btn-sm btn-warning">Sửa</a>
-                    <form method="post" action="{{ path('app_speaker_delete', {'id': speaker.id}) }}" style="display: inline-block" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ speaker.id) }}">
-                        <button class="btn btn-sm btn-danger">Xóa</button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+          <td style="color: var(--text-muted)">#{{ speaker.id }}</td>
+          <td style="font-weight: 500">{{ speaker.name }}</td>
+          <td>{{ speaker.email }}</td>
+          <td>{{ speaker.topic }}</td>
+          <td>
+            <div class="actions">
+              <a href="{{ path('app_speaker_detail', {'id': speaker.id}) }}" class="action-link">Xem</a>
+              <a href="{{ path('app_speaker_edit', {'id': speaker.id}) }}" class="action-link">Sửa</a>
+              <form method="post" action="{{ path('app_speaker_delete', {'id': speaker.id}) }}" style="display:inline" onsubmit="return confirm('Xóa diễn giả này?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ speaker.id) }}">
+                <button type="submit" class="action-link delete" style="background:none; border:none; padding:0; cursor:pointer;">Xóa</button>
+              </form>
+            </div>
+          </td>
+        </tr>
         {% else %}
-            <tr><td colspan="5" class="text-center">Chưa có dữ liệu.</td></tr>
+        <tr>
+          <td colspan="5" style="text-align:center; padding: 48px; color: var(--text-muted)">
+            Chưa có dữ liệu.
+          </td>
+        </tr>
         {% endfor %}
-        </tbody>
+      </tbody>
     </table>
+  </div>
 </div>
 {% endblock %}

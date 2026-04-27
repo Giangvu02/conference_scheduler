@@ -18,8 +18,7 @@ class SpeakerType extends AbstractType
             ->add('name', TextType::class)
             ->add('email', EmailType::class)
             ->add('topic', TextType::class)
-            ->add('biography', TextareaType::class)
-            ->add('photo', TextType::class);
+            ->add('biography', TextareaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

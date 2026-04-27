@@ -2,90 +2,303 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Conference Scheduler{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    {# Thư viện thông báo SweetAlert2 #}
+    {# SweetAlert2 notification library #}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #64748b;
+            --bg: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
+
         body {
-            background: #f5f5f5;
-            font-family: Arial, sans-serif;
+            background: var(--bg) !important;
+            color: var(--text-main);
         }
-        .navbar {
-            margin-bottom: 20px;
+
+        /* ── Navbar ── */
+        .navbar-custom {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            height: 56px;
         }
-        .container-box {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+        .navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0;
         }
-        .nav-btn {
-            margin-right: 5px;
+
+        /* Brand */
+        .navbar-brand-custom {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary) !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-right: 28px;
+        }
+        .navbar-brand-custom i { font-size: 1.1rem; }
+        .navbar-brand-custom:hover { color: var(--primary-hover) !important; }
+
+        /* Nav links */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 11px;
+            color: var(--text-muted) !important;
             font-weight: 500;
+            font-size: 0.8125rem;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.15s;
+            white-space: nowrap;
         }
-        /* Style cho lỗi nhập liệu */
+        .nav-link-custom i { font-size: 0.75rem; }
+        .nav-link-custom:hover {
+            background: var(--bg);
+            color: var(--primary) !important;
+        }
+        .nav-link-custom.active {
+            color: var(--primary) !important;
+            background: rgba(37,99,235,0.08);
+        }
+
+        /* Divider */
+        .nav-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 12px;
+            flex-shrink: 0;
+        }
+
+        /* User section */
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 12px 4px 8px;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-email {
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 500;
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .badge-admin {
+            background: #fef3c7;
+            color: #92400e;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: transparent;
+            color: #ef4444;
+            border: 1px solid #fecaca;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.15s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-logout:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .btn-login {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: background 0.15s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-login:hover {
+            background: var(--primary-hover);
+            color: white;
+        }
+
+        .container-box {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Input validation error styles */
         .is-invalid { border-color: #dc3545 !important; }
         .invalid-feedback { display: block; color: #dc3545; font-size: 0.85em; margin-top: 5px; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .nav-link-custom span { display: none; }
+            .nav-link-custom { padding: 6px 9px; }
+            .user-email { max-width: 100px; }
+        }
+        @media (max-width: 640px) {
+            .navbar-brand-custom span { display: none; }
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ path('app_room_index') }}">Conference Scheduler</a>
+<nav class="navbar-custom">
+    <div class="navbar-inner">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <!-- Brand -->
+        <a href="{{ path('home') }}" class="navbar-brand-custom">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Conference Scheduler</span>
+        </a>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="navbar-nav me-auto">
-                {# Các nút bấm dạng btn-light giống hệt giao diện cũ #}
-                <a class="btn btn-light btn-sm nav-btn" href="/conference">Conference</a>
-                <a class="btn btn-light btn-sm nav-btn" href="/session">Session</a>
-                <a class="btn btn-light btn-sm nav-btn" href="/speaker">Speaker</a>
-                <a class="btn btn-light btn-sm nav-btn" href="{{ path('app_room_index') }}">Room</a>
-                <a class="btn btn-light btn-sm nav-btn" href="/user">User</a>
-                <a class="btn btn-light btn-sm nav-btn" href="{{ path('app_registration_index') }}">Registration</a>
-            </div>
-
-            <div class="d-flex align-items-center">
-                {% if app.user %}
-                    <span class="text-white me-3">
-                        Welcome <strong>{{ app.user.email }}</strong>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <span class="badge bg-warning text-dark ms-1">ADMIN</span>
-                        {% endif %}
-                    </span>
-                    <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm">Logout</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="btn btn-success btn-sm">Login</a>
-                {% endif %}
-            </div>
+        <!-- Nav Links -->
+        <div class="nav-menu">
+            <a href="{{ path('app_conference_index') }}" class="nav-link-custom">
+                <i class="fas fa-users"></i><span>Conferences</span>
+            </a>
+            <a href="{{ path('app_session_index') }}" class="nav-link-custom">
+                <i class="fas fa-tasks"></i><span>Sessions</span>
+            </a>
+            <a href="{{ path('app_speaker_index') }}" class="nav-link-custom">
+                <i class="fas fa-microphone-alt"></i><span>Speakers</span>
+            </a>
+            <a href="{{ path('app_room_index') }}" class="nav-link-custom">
+                <i class="fas fa-door-open"></i><span>Rooms</span>
+            </a>
+            <a href="{{ path('app_user_index') }}" class="nav-link-custom">
+                <i class="fas fa-user-circle"></i><span>Users</span>
+            </a>
+            <a href="{{ path('app_registration_index') }}" class="nav-link-custom">
+                <i class="fas fa-clipboard-list"></i><span>Registrations</span>
+            </a>
         </div>
+
+        <!-- User / Auth -->
+        <div class="nav-divider"></div>
+        <div class="user-section">
+            {% if app.user %}
+                <div class="user-pill">
+                    <div class="user-avatar">
+                        <i class="fas fa-user" style="font-size:0.6rem;"></i>
+                    </div>
+                    <span class="user-email">{{ app.user.email }}</span>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <span class="badge-admin">Admin</span>
+                    {% endif %}
+                </div>
+                <a href="{{ path('app_logout') }}" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i><span>Login</span>
+                </a>
+            {% endif %}
+        </div>
+
     </div>
 </nav>
 
-<div class="container">
+<div class="container-fluid" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px;">
     <div class="container-box">
         {% block body %}{% endblock %}
     </div>
 </div>
 
-{# Bootstrap JS để các nút menu hoạt động #}
+{# Bootstrap JS #}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // 1. Pop-up thông báo thành công/lỗi từ Controller
+    // Flash notifications from Controller
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             Swal.fire({
                 icon: '{{ label == "success" ? "success" : "error" }}',
-                title: '{{ label == "success" ? "Thành công!" : "Thông báo" }}',
+                title: '{{ label == "success" ? "Success!" : "Notice" }}',
                 text: '{{ message }}',
                 confirmButtonColor: '#3085d6',
                 timer: 3500
@@ -93,14 +306,14 @@
         {% endfor %}
     {% endfor %}
 
-    // 2. Pop-up khi có lỗi Validate Form
+    // Pop-up on form validation errors
     document.addEventListener('DOMContentLoaded', function() {
         const hasErrors = document.querySelector('.is-invalid, .invalid-feedback, .alert-danger');
         if (hasErrors) {
             Swal.fire({
                 icon: 'error',
-                title: 'Lỗi nhập liệu',
-                text: 'Vui lòng kiểm tra lại các thông tin màu đỏ trong form!',
+                title: 'Validation Error',
+                text: 'Please review the highlighted fields and try again.',
                 confirmButtonColor: '#d33'
             });
         }
